@@ -11,7 +11,7 @@ const PRODUCT_CODE: &str = "the_product_code";
 
 #[tokio::main]
 async fn main() {
-    let arp_client = Client::new("https://api.yourdomain.com", "your_api_key");
+    let arp_client = Client::new("https://api.yourdomain.com", "your_subscription_key");
     let result = arp_client.is_valid_subscription(PRODUCT_CODE).await;
     match result {
         Ok(_) => println!("Subscription is valid"),
