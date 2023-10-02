@@ -1,0 +1,26 @@
+[package]
+name = "arpstore-sdk"
+description = "A Rust SDK for the Arpstore API."
+authors = ["Awiteb <awiteb@hotmail.com>"]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.63.0"
+license = "MIT"
+repository = "https://github.com/theawiteb/arpstore-sdk"
+documentation = "https://docs.rs/arpstore-sdk/latest/arpstore_sdk/"
+readme = "README.md"
+keywords = ["arpstore", "sdk", "api"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+chrono = "0.4.31"
+impl_new = "0.2.1"
+machineid-rs = "1.2.4"
+reqwest = { version = "0.11.20", features = ["json"] }
+serde_json = "1.0.107"
+sha2 = "0.10.8"
+thiserror = "1.0.49"
+
+[dev-dependencies]
+tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread"] }
