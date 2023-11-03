@@ -50,8 +50,8 @@ fn add_body(
     device_hash: &str,
     data: &str,
 ) -> reqwest::RequestBuilder {
-    let timestamp = chrono::Utc::now().timestamp().to_string();
-    let signature = create_signature(subscription_key, device_hash, data, &timestamp);
+    let timestamp = chrono::Utc::now().timestamp();
+    let signature = create_signature(subscription_key, device_hash, data, &timestamp.to_string());
     request.json(&serde_json::json!(
         {
             "device_hash": device_hash,
