@@ -2,7 +2,7 @@
 name = "arpstore-sdk"
 description = "A Rust SDK for the Arpstore API."
 authors = ["Awiteb <awiteb@hotmail.com>"]
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 rust-version = "1.63.0"
 license = "MIT"
