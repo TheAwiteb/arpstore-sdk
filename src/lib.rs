@@ -17,10 +17,16 @@ pub enum Error {
     Api(String),
 }
 
-fn create_signature(subscription_key: &str, device_hash: &str, timestamp: String) -> String {
+fn create_signature(
+    subscription_key: &str,
+    device_hash: &str,
+    data: &str,
+    timestamp: &str,
+) -> String {
     let mut hasher = Sha256::new();
     hasher.update(subscription_key.as_bytes());
     hasher.update(device_hash.as_bytes());
+    hasher.update(data.as_bytes());
     hasher.update(timestamp.as_bytes());
     hasher
         .finalize()
@@ -42,12 +48,14 @@ fn add_body(
     request: reqwest::RequestBuilder,
     subscription_key: &str,
     device_hash: &str,
+    data: &str,
 ) -> reqwest::RequestBuilder {
-    let timestamp = chrono::Utc::now().timestamp();
-    let signature = create_signature(subscription_key, device_hash, timestamp.to_string());
+    let timestamp = chrono::Utc::now().timestamp().to_string();
+    let signature = create_signature(subscription_key, device_hash, data, &timestamp);
     request.json(&serde_json::json!(
         {
             "device_hash": device_hash,
+            "data": data,
             "timestamp": timestamp,
             "signature": signature
         }
@@ -59,6 +67,7 @@ fn add_body(
 pub struct Client {
     client: reqwest::Client,
     subscription_key: String,
+    data: String,
     arp_url: String,
 }
 
@@ -68,8 +77,15 @@ impl Client {
         Self {
             client: reqwest::Client::new(),
             subscription_key: subscription_key.into(),
+            data: String::new(),
             arp_url: arp_url.into(),
         }
+    }
+
+    /// Add a data to the subsction, default is empty
+    pub fn data(mut self, data: impl Into<String>) -> Self {
+        self.data = data.into();
+        self
     }
 
     /// Check if a subscription is valid.
@@ -88,6 +104,7 @@ impl Client {
             ),
             &self.subscription_key,
             &device_hash,
+            &self.data,
         );
         let response = request_builder.send().await?;
         let status = response.status();
