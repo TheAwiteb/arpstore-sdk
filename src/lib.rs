@@ -17,6 +17,7 @@ pub enum Error {
     Api(String),
 }
 
+#[allow(clippy::format_collect)]
 fn create_signature(
     subscription_key: &str,
     device_hash: &str,
@@ -114,7 +115,7 @@ impl Client {
             .get("message")
             .unwrap()
             .to_string();
-        let message = message.trim_matches('"').to_owned();
+        let message = message.trim_matches('"').replace(r#"\n"#, "\n").to_owned();
 
         if status == reqwest::StatusCode::OK {
             if message.ends_with(product_code) {
